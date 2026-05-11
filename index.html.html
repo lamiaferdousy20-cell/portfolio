@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lamia Ferdousy — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --light: #f5f3ef;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --border: #ddd8d0;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--ink); font-size: 15px; line-height: 1.7; }
+
+  .cover { min-height: 100vh; background: var(--ink); display: flex; flex-direction: column; justify-content: flex-end; padding: 80px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(45,90,61,0.3) 0%, transparent 70%); }
+  .cover-label { font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .cover h1 { font-family: 'Playfair Display', serif; font-size: clamp(52px, 7vw, 88px); font-weight: 700; color: var(--white); line-height: 1.05; margin-bottom: 28px; letter-spacing: -1px; }
+  .cover-tagline { font-size: 16px; color: rgba(255,255,255,0.55); letter-spacing: 1.5px; font-weight: 300; margin-bottom: 60px; }
+  .cover-tagline span { color: rgba(255,255,255,0.25); margin: 0 12px; }
+  .cover-contact { display: flex; gap: 40px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; }
+  .cover-contact a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; }
+  .cover-contact a:hover { color: var(--white); }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 80px 60px; }
+  .section { margin-bottom: 80px; }
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 3.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 32px; display: flex; align-items: center; gap: 16px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .profile-text { font-family: 'Playfair Display', serif; font-size: 22px; line-height: 1.65; color: var(--ink); font-weight: 400; max-width: 720px; }
+  .profile-text em { font-style: italic; color: var(--accent); }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .stat-item { display: flex; flex-direction: column; gap: 6px; }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* FEATURED */
+  .featured-card { background: var(--white); border: 1px solid var(--border); margin-bottom: 32px; display: grid; grid-template-columns: 3fr 2fr; min-height: 240px; overflow: hidden; }
+  .featured-card.flip { grid-template-columns: 2fr 3fr; }
+  .featured-card.flip .card-content { order: 2; }
+  .featured-card.flip .card-meta { order: 1; }
+  .card-content { padding: 40px; display: flex; flex-direction: column; justify-content: space-between; }
+  .card-tag { display: inline-block; background: var(--accent-light); color: var(--accent); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 16px; width: fit-content; }
+  .card-tag.amber { background: #fef3e2; color: #b45309; }
+  .card-content h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; line-height: 1.3; margin-bottom: 12px; }
+  .card-content p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .card-role { font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 16px; margin-top: auto; }
+  .card-role strong { color: var(--ink); font-weight: 500; }
+  .card-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 500; margin-top: 14px; }
+  .card-link::after { content: '→'; }
+  .card-links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+  .card-meta { background: var(--accent); padding: 40px; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+  .card-meta.dk { background: #1a1a1a; }
+  .card-meta.sl { background: #2c3e50; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-key { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+  .meta-value { font-size: 14px; color: rgba(255,255,255,0.9); }
+
+  /* REACH IMAGE in CDP card */
+  .reach-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* SOLO VIDEO CARDS */
+  .solo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+  .solo-card { background: var(--white); border: 1px solid var(--border); overflow: hidden; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
+  .solo-icon-box { aspect-ratio: 16/9; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .solo-icon-box svg { opacity: 0.6; }
+  .solo-icon-box .s-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+  .solo-info { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .solo-title { font-size: 13.5px; font-weight: 500; }
+  .solo-org { font-size: 11px; color: var(--muted); }
+  .solo-watch { font-size: 12px; color: var(--accent); font-weight: 500; margin-top: 8px; }
+
+  /* KOTHA LINKS */
+  .kotha-wrapper { background: var(--ink); padding: 36px; }
+  .kotha-header { margin-bottom: 24px; }
+  .kotha-header h4 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--white); margin-bottom: 6px; }
+  .kotha-header p { font-size: 13px; color: rgba(255,255,255,0.45); }
+  .kotha-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .kotha-ep { background: rgba(255,255,255,0.05); padding: 20px; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255,255,255,0.06); }
+  .kotha-ep-icon { font-size: 22px; }
+  .kotha-ep-title { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .kotha-ep a { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* COMMS MATERIALS */
+  .mat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); }
+  .mat-item { background: var(--white); padding: 24px; display: flex; flex-direction: column; gap: 6px; }
+  .mat-icon { font-size: 20px; margin-bottom: 4px; }
+  .mat-title { font-size: 13.5px; font-weight: 500; }
+  .mat-org { font-size: 11px; color: var(--muted); }
+  .mat-item a { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .mat-item a::after { content: ' →'; }
+  .mat-item .req-btn { display: inline-block; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 500; padding: 5px 12px; text-decoration: none; margin-top: 4px; width: fit-content; }
+  .mat-item .req-btn::after { content: none; }
+
+  /* NEWSLETTER */
+  .newsletter-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .newsletter-card { background: var(--white); border: 1px solid var(--border); padding: 28px; }
+  .n-icon { font-size: 24px; margin-bottom: 10px; }
+  .n-tag { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; display: block; }
+  .newsletter-card h5 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
+  .newsletter-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .newsletter-card a { font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* EVENTS */
+  .event-card { background: var(--white); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+  .event-photo { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .event-body { padding: 32px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; }
+  .event-card h4 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 8px; }
+  .event-card p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+  .event-card a { font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .event-badge { background: var(--ink); color: var(--white); padding: 14px 22px; text-align: center; white-space: nowrap; align-self: start; }
+  .event-badge .venue { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; display: block; margin-bottom: 4px; }
+  .event-badge .yr { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
+
+  /* WEBSITE */
+  .website-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .website-card { background: var(--white); border: 1px solid var(--border); padding: 28px; }
+  .w-icon { font-size: 28px; margin-bottom: 12px; }
+  .website-card h5 { font-family: 'Playfair Display', serif; font-size: 17px; margin-bottom: 4px; }
+  .w-role { font-size: 11px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .website-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* CAMPAIGNS */
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); }
+  .cat-block { background: var(--white); padding: 36px; }
+  .cat-block h4 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .cat-sub { font-size: 11px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+  .wl { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .wl li { display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .wl li:last-child { border-bottom: none; padding-bottom: 0; }
+  .wl .wo { font-size: 11px; color: var(--muted); }
+  .wl a { color: var(--accent); text-decoration: none; font-size: 11px; }
+
+  /* FIELD PHOTOS */
+  .field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+  .field-photo { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .field-caption { font-size: 11px; color: var(--muted); padding: 6px 2px; }
+
+  /* SOMRU */
+  .somru-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .somru-link { background: var(--white); border: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-size: 13px; font-weight: 500; }
+  .somru-link span { font-size: 18px; }
+  .somru-link small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+
+  /* PRESENTATIONS */
+  .pres-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); margin-top: 16px; }
+  .pres-item { background: var(--white); padding: 24px; }
+  .pres-icon { font-size: 24px; margin-bottom: 10px; }
+  .pres-title { font-size: 13.5px; font-weight: 500; margin-bottom: 4px; }
+  .pres-org { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .pres-item a { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .pres-item a::after { content: ' →'; }
+
+  /* SOCIAL */
+  .social-banner { background: var(--ink); color: var(--white); padding: 48px; margin-bottom: 2px; }
+  .social-banner h4 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 8px; }
+  .social-banner p { font-size: 14px; color: rgba(255,255,255,0.55); max-width: 580px; line-height: 1.65; }
+  .plat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--border); margin-bottom: 2px; }
+  .plat-item { background: var(--white); padding: 24px; text-align: center; }
+  .plat-icon { font-size: 22px; margin-bottom: 6px; }
+  .plat-name { font-weight: 500; font-size: 13px; margin-bottom: 4px; }
+  .plat-detail { font-size: 11px; color: var(--muted); }
+  .accounts-note { background: var(--accent-light); padding: 20px 32px; font-size: 13px; color: var(--accent); border-left: 3px solid var(--accent); }
+
+  /* AGENCY */
+  .agency-list { display: flex; flex-wrap: wrap; gap: 12px; }
+  .agency-tag { background: var(--white); border: 1px solid var(--border); padding: 10px 20px; font-size: 13px; font-weight: 500; }
+  .agency-note { margin-top: 20px; font-size: 13.5px; color: var(--muted); max-width: 620px; line-height: 1.65; }
+
+  /* EARLY */
+  .early-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); }
+  .early-item { background: var(--white); padding: 28px; }
+  .early-icon { font-size: 24px; margin-bottom: 10px; }
+  .early-item h5 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .early-org { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .early-item p { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); }
+  .skill-block { background: var(--white); padding: 32px; }
+  .skill-block h5 { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 500; }
+  .skill-block ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .skill-block ul li { font-size: 13.5px; color: var(--ink); padding-left: 14px; position: relative; }
+  .skill-block ul li::before { content: '—'; position: absolute; left: 0; color: var(--border); }
+
+  /* FOOTER */
+  .footer { background: var(--ink); color: var(--white); padding: 60px 80px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 32px; }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+  .footer-title { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; }
+  .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; }
+  .footer-links a:hover { color: var(--white); }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Portfolio · 2026</div>
+  <h1>Lamia<br>Ferdousy</h1>
+  <div class="cover-tagline">Strategic Communications <span>|</span> Storytelling <span>|</span> Impact</div>
+  <div class="cover-contact">
+    <a href="mailto:lamia.ferdousy20@gmail.com">lamia.ferdousy20@gmail.com</a>
+    <a href="tel:+8801686840613">+880 1686 840 613</a>
+    <a href="https://www.linkedin.com/in/lamia-ferdousy" target="_blank">linkedin.com/in/lamia-ferdousy</a>
+    <span style="color:rgba(255,255,255,0.25);font-size:13px;">Dhaka, Bangladesh</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- PROFILE -->
+  <div class="section">
+    <div class="section-label">Profile</div>
+    <p class="profile-text">
+      Five years in development communications — and most of it has been about making complex,
+      uncomfortable realities land with the right audience. Plastic waste, community livelihoods,
+      circular economies. Whether it's a <em>documentary screened before diplomats and donors</em>,
+      a storybook built from scratch, or a campaign that reached 153,000 people organically on Facebook —
+      the work has always been about closing the gap between what programmes do and what people understand them to do.
+    </p>
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-number">76K+</span>
+        <span class="stat-label">Beneficiaries reached through PLEASE Project communications</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">153K+</span>
+        <span class="stat-label">Organic Facebook reach — Prerona CDP Campaign</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">5+</span>
+        <span class="stat-label">Years across donor-funded, CSR and private sector communications</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED WORK -->
+  <div class="section">
+    <div class="section-label">Featured Work</div>
+
+    <!-- PLEASE Documentary -->
+    <div class="featured-card">
+      <div class="card-content">
+        <div>
+          <span class="card-tag amber">Internal Use Only</span>
+          <h3>PLEASE Project Documentary</h3>
+          <p>A documentary on BPCL's role in Bangladesh's circular economy — covering plastic waste management, recycling business unit innovation, traceability, and community impact through the World Bank-funded PLEASE Project. Screened during presentations at various events, including the Stakeholder Dialogue and Learning Dissemination Workshops, before an audience of government officials, embassy representatives, donors, INGOs, media, and academics.</p>
+          <div class="card-role"><strong>Role:</strong> Communications lead — brief, production oversight and editorial direction in collaboration with Redorange Communication &nbsp;·&nbsp; <strong>Year:</strong> 2025</div>
+        </div>
+        <a href="https://youtu.be/WBl9zbUye8M" class="card-link" target="_blank">Watch (Internal Use Only)</a>
+      </div>
+      <div class="card-meta">
+        <div class="meta-item"><span class="meta-key">Format</span><span class="meta-value">Documentary Film · 5 min</span></div>
+        <div class="meta-item"><span class="meta-key">Funder</span><span class="meta-value">World Bank</span></div>
+        <div class="meta-item"><span class="meta-key">Screened at</span><span class="meta-value">Stakeholder Dialogue & Learning Dissemination Workshops</span></div>
+        <div class="meta-item"><span class="meta-key">Agency</span><span class="meta-value">Redorange Communication</span></div>
+      </div>
+    </div>
+
+    <!-- BPCL Storybook -->
+    <div class="featured-card flip">
+      <div class="card-content">
+        <div>
+          <span class="card-tag">Story Book · 2026</span>
+          <h3>BPCL Story Book — Circular Economy in Action</h3>
+          <p>A story book documenting BPCL's innovations in the rPET recycling model — combining project impact data, beneficiary success stories, social activities, and institutional collaborations into a single cohesive narrative. Written, designed, and produced in-house.</p>
+          <div class="card-role"><strong>Role:</strong> Sole writer and designer &nbsp;·&nbsp; <strong>Pages:</strong> 26 &nbsp;·&nbsp; <strong>Year:</strong> 2026</div>
+        </div>
+        <a href="https://drive.google.com/file/d/1tVM7h0TtLLuXCiQTYjpcqS3U2Z4JUlt9/view?usp=drive_link" class="card-link" target="_blank">View Publication (Internal Use Only)</a>
+      </div>
+      <div class="card-meta dk">
+        <div class="meta-item"><span class="meta-key">Format</span><span class="meta-value">Printed Story Book · 26 pages</span></div>
+        <div class="meta-item"><span class="meta-key">Scope</span><span class="meta-value">Writing + Design + Production</span></div>
+        <div class="meta-item"><span class="meta-key">Organisation</span><span class="meta-value">BPCL / PLEASE Project</span></div>
+        <div class="meta-item"><span class="meta-key">Funder</span><span class="meta-value">World Bank</span></div>
+      </div>
+    </div>
+
+    <!-- CDP -->
+    <div class="featured-card">
+      <div class="card-content">
+        <div>
+          <span class="card-tag">Video Series · 2023–24</span>
+          <h3>Prerona CDP — Community Stories Campaign</h3>
+          <p>Beneficiary-led AVs produced to spotlight the impact of Prerona Foundation's Community Development Programme in Kushtia. The campaign captured the stories of individuals skilled and supported through the programme, and formed the cornerstone of a campaign that achieved 153,000+ organic reach on Facebook within one week.</p>
+          <div class="card-role"><strong>Role:</strong> End-to-end production lead — concept, brief, filming coordination, post-production oversight &nbsp;·&nbsp; <strong>Year:</strong> 2023–24</div>
+        </div>
+        <div class="card-links-row">
+          <a href="https://youtu.be/ngs18lew8eM?si=qleZkwSYhsYINntQ" class="card-link" target="_blank">Teaser</a>
+          <a href="https://youtu.be/_IT9gqajlUA?si=PPbfW7qfad6XNp1x" class="card-link" target="_blank">Samia's Story</a>
+          <a href="https://youtu.be/IUXr9dZBKB4?si=Sq1KdpkvaZkJyoJI" class="card-link" target="_blank">Abu Taleb's Story</a>
+        </div>
+      </div>
+      <div class="card-meta sl" style="padding:0; overflow:hidden;">
+        <img src="https://i.postimg.cc/RCGVyb3Q/Screenshot-2026-05-06-012325.png" alt="CDP Facebook reach 153K" class="reach-img" onerror="this.parentElement.style.background='#2c3e50'; this.style.display='none';">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIDEO WORK -->
+  <div class="section">
+    <div class="section-label">Video Work</div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:18px;">🎬</span> Solo productions — shot, directed and edited independently.
+    </p>
+
+    <div class="solo-grid">
+      <a href="https://youtu.be/n0UCBl6QTbY" target="_blank" class="solo-card">
+        <div class="solo-icon-box">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="white" stroke-width="1.5"/><polygon points="16,13 30,20 16,27" fill="white"/></svg>
+          <span class="s-label">Watch</span>
+        </div>
+        <div class="solo-info">
+          <div class="solo-title">BPCL Blockchain AI Waste Tracking</div>
+          <div class="solo-org">BPCL / PLEASE Project · 2025</div>
+          <div class="solo-watch">Watch on YouTube →</div>
+        </div>
+      </a>
+      <a href="https://youtu.be/5pZEZiBu-4I" target="_blank" class="solo-card">
+        <div class="solo-icon-box">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="white" stroke-width="1.5"/><polygon points="16,13 30,20 16,27" fill="white"/></svg>
+          <span class="s-label">Watch</span>
+        </div>
+        <div class="solo-info">
+          <div class="solo-title">TRACKER App — Explainer Video</div>
+          <div class="solo-org">BPCL / PLEASE Project · 2025</div>
+          <div class="solo-watch">Watch on YouTube →</div>
+        </div>
+      </a>
+      <a href="https://youtu.be/WBl9zbUye8M" target="_blank" class="solo-card">
+        <div class="solo-icon-box">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="white" stroke-width="1.5"/><polygon points="16,13 30,20 16,27" fill="white"/></svg>
+          <span class="s-label">Internal</span>
+        </div>
+        <div class="solo-info">
+          <div class="solo-title">PLEASE Project Documentary</div>
+          <div class="solo-org">BPCL · 2025 · Internal Use Only</div>
+          <div class="solo-watch">Watch on YouTube →</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Preronar Kotha -->
+    <div class="kotha-wrapper">
+      <div class="kotha-header">
+        <h4>Preronar Kotha — Season 03</h4>
+        <p>Thought leadership broadcast series · Prerona Foundation · End-to-end production oversight</p>
+      </div>
+      <div class="kotha-links">
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">📽</div>
+          <div class="kotha-ep-title">Promo</div>
+          <a href="https://youtu.be/-Mtx3-V6MoM?si=LTzyH0uPQjHIN819" target="_blank">Watch →</a>
+        </div>
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">🎙</div>
+          <div class="kotha-ep-title">Episode 01</div>
+          <a href="https://youtu.be/Rkz_UHbLL2E?si=SEduOcHiXFLZvT6z" target="_blank">Watch →</a>
+        </div>
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">🎙</div>
+          <div class="kotha-ep-title">Episode 02</div>
+          <a href="https://youtu.be/1HM5k-V4dD8?si=BR5f9htl9ks4aR22" target="_blank">Watch →</a>
+        </div>
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">🎙</div>
+          <div class="kotha-ep-title">Episode 03</div>
+          <a href="https://youtu.be/SpnYWsAoZas?si=khHqvl3wmGflpPF1" target="_blank">Watch →</a>
+        </div>
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">🎙</div>
+          <div class="kotha-ep-title">Episode 04</div>
+          <a href="https://youtu.be/02ifohrY0hc?si=aYKnXKt5sLsHAIDL" target="_blank">Watch →</a>
+        </div>
+        <div class="kotha-ep">
+          <div class="kotha-ep-icon">🏁</div>
+          <div class="kotha-ep-title">Season Finale</div>
+          <a href="https://youtu.be/GfdsCiQCEcY?si=jpbU3Lt0qer2wL4Y" target="_blank">Watch →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNICATIONS MATERIALS -->
+  <div class="section">
+    <div class="section-label">Communications Materials</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">IEC materials, publications and print collateral developed across projects.</p>
+    <div class="mat-grid">
+      <div class="mat-item">
+        <div class="mat-icon">📖</div>
+        <div class="mat-title">BPCL Story Book</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1tVM7h0TtLLuXCiQTYjpcqS3U2Z4JUlt9/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-title">BPCL RBU Model Booklet</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2025</div>
+        <a href="https://drive.google.com/file/d/1enSiWSt0RTxx5VJq95tZU3uG69nPIttb/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">📋</div>
+        <div class="mat-title">PLEASE Project at a Glance</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1NCRn4qd2jMiPjOLuFns6jwq6mFptTzh_/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">♻️</div>
+        <div class="mat-title">RBU Model Brochure</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1EGqD5sjBXOI8vY2kL-r4ski-cdUpyzCO/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">🏫</div>
+        <div class="mat-title">School Programme Brochure</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/189UfCEKfSHmFa-D_ql2YD2MMdEGJuYtF/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">🤝</div>
+        <div class="mat-title">Social Interventions Brochure</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1yaWHDNrpALO3rDSRuUCTAa5AKFEJ4XTX/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">💚</div>
+        <div class="mat-title">Stories of Hope</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1b1ktUvH9LlmOG-RhkU1_92hKOJCoiQes/view?usp=sharing" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">📱</div>
+        <div class="mat-title">Tracker App Brochure</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1Vv_dQlpuqQHxk4j-Frkaapbmw-OINZUt/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">🌏</div>
+        <div class="mat-title">Bhutan Ecological Society Visit</div>
+        <div class="mat-org">BPCL / PLEASE Project · 2026</div>
+        <a href="https://drive.google.com/file/d/1hnc1mPmnOdLyrPdOuTaxgDc9Pc4znNyO/view?usp=drive_link" target="_blank">View</a>
+      </div>
+      <div class="mat-item">
+        <div class="mat-icon">☕</div>
+        <div class="mat-title">Preronar Kotha Coffee Table Book</div>
+        <div class="mat-org">Prerona Foundation · Internal Content</div>
+        <a href="https://drive.google.com/file/d/1uUltUY5OaZQjXKlJGZP-pkHhOtWwiw3Q/view?usp=drive_link" target="_blank" class="req-btn">Request Access</a>
+      </div>
+    </div>
+
+    <!-- Presentations & Banners -->
+    <div style="margin-top:32px;">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🖥</span> Presentations & Event Design</p>
+      <div class="pres-grid">
+        <div class="pres-item">
+          <div class="pres-icon">📊</div>
+          <div class="pres-title">Presentation for MD — WaterAid & DoE Seminar</div>
+          <div class="pres-org">BPCL · World Environment Day 2025</div>
+          <a href="https://drive.google.com/file/d/1AnKx4u7HrgEd2k8-_OXsMt5UrFJ4X4p_/view?usp=drive_link" target="_blank">View</a>
+        </div>
+        <div class="pres-item">
+          <div class="pres-icon">🪧</div>
+          <div class="pres-title">BPCL Process Chart (X Banner)</div>
+          <div class="pres-org">BPCL / PLEASE Project</div>
+          <a href="https://drive.google.com/file/d/1Miovtq0n7ydJ0fVyXfXlCifFZcWwBV5_/view?usp=drive_link" target="_blank">View</a>
+        </div>
+        <div class="pres-item">
+          <div class="pres-icon">🪧</div>
+          <div class="pres-title">BPCL Flow Chart (Banner)</div>
+          <div class="pres-org">BPCL / PLEASE Project</div>
+          <a href="https://drive.google.com/file/d/1nMPg-hUS1pVrEbvMCgZmsI7OFSOBtWjE/view?usp=sharing" target="_blank">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="section">
+    <div class="section-label">Published Writing — PLEASE Project</div>
+    <div class="newsletter-cards">
+      <div class="newsletter-card">
+        <div class="n-icon">✍️</div>
+        <span class="n-tag">Newsletter · PLEASE Project Website</span>
+        <h5>Dignity for Plastic Workers: The Human Side of the Plastic Value Chain</h5>
+        <p>Long-form feature on the lives and dignity of informal plastic waste workers in Bangladesh's recycling value chain.</p>
+        <a href="https://please-project.org/wp-content/uploads/2025/06/BPCL-Dignity-for-Plastic-Workers_-The-Human-Side-of-the-Plastic-Value-Chain.pdf" target="_blank">Read on PLEASE Project →</a>
+      </div>
+      <div class="newsletter-card">
+        <div class="n-icon">✍️</div>
+        <span class="n-tag">Newsletter · PLEASE Project Website</span>
+        <h5>BPCL's RBU Model Paves the Way for Sustainable Plastic Waste Management</h5>
+        <p>Feature story on BPCL's Recycling Business Unit model as a replicable solution for sustainable plastic waste management in South Asia.</p>
+        <a href="https://please-project.org/story/bpcls-rbu-model-paves-the-way-for-sustainable-plastic-waste-management/" target="_blank">Read on PLEASE Project →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAKEHOLDER EVENTS -->
+  <div class="section">
+    <div class="section-label">Stakeholder Events</div>
+
+    <div class="event-card">
+      <img src="https://i.postimg.cc/Pf8nz3Wx/DSC07242.jpg" alt="Stakeholder Dialogue at Intercontinental" class="event-photo" onerror="this.style.display='none'">
+      <div class="event-body">
+        <div>
+          <h4>Stakeholder Dialogue & Learning Dissemination Workshop</h4>
+          <p>Managed end-to-end communications for a multi-stakeholder convening under the PLEASE Project. Attendees included government representatives, World Bank officials, embassy delegates, INGOs, media, and academics. Produced all event communications, AV materials, and documentation.</p>
+          <a href="https://www.tbsnews.net/bangladesh/environment/ending-plastic-waste-needs-strong-informal-sector-leadership-experts-1090916" target="_blank">Press Coverage — TBS News →</a>
+        </div>
+        <div class="event-badge">
+          <span class="venue">Intercontinental</span>
+          <span class="yr">Dhaka · 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <img src="https://i.postimg.cc/tTSwtPTM/RAZ03439.jpg" alt="Learning Dissemination Workshop at Renaissance" class="event-photo" onerror="this.style.display='none'">
+      <div class="event-body">
+        <div>
+          <h4>Learning Dissemination Workshop — Project Close</h4>
+          <p>Planned and executed the closing stakeholder workshop for the PLEASE Project, including screening of the project documentary. Coordinated across government, development partners, private sector, media, and civil society — managing all communications, event branding, documentation, and post-event reporting.</p>
+          <a href="https://www.tbsnews.net/economy/corporates/bpcl-launches-ai-blockchain-waste-tracking-system-1399101" target="_blank">Press Coverage — TBS News →</a>
+        </div>
+        <div class="event-badge">
+          <span class="venue">Renaissance</span>
+          <span class="yr">Dhaka · 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEBSITE WORK -->
+  <div class="section">
+    <div class="section-label">Website Revamp</div>
+    <div class="website-grid">
+      <div class="website-card">
+        <div class="w-icon">🌐</div>
+        <h5>Prerona Foundation</h5>
+        <div class="w-role">Website Revamp · Content & Structure</div>
+        <p>Led the revamp of Prerona Foundation's website — restructuring content architecture, rewriting copy, and overseeing visual refresh to align with the organisation's communications strategy.</p>
+      </div>
+      <div class="website-card">
+        <div class="w-icon">🌐</div>
+        <h5>bizNov (Business Novelty)</h5>
+        <div class="w-role">Website Revamp · Content & Structure</div>
+        <p>Executed website revamp for bizNov — rebuilding content structure, rewriting brand copy, and coordinating design execution to position the consultancy's digital presence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPAIGNS & PR -->
+  <div class="section">
+    <div class="section-label">Campaigns & PR</div>
+    <div class="cat-grid">
+      <div class="cat-block">
+        <h4>Digital Campaigns</h4>
+        <div class="cat-sub">Social · Advocacy · BCC</div>
+        <ul class="wl">
+          <li>CDP Advocacy Campaign — 153K+ Organic Facebook Reach
+            <span class="wo">Prerona Foundation · Facebook, Instagram, YouTube · 2023</span>
+          </li>
+          <li>Shatranji of Rangpur — Livelihood Campaign
+            <span class="wo">Joyee / Prerona Foundation · Digital platforms</span>
+          </li>
+          <li>PLEASE Project Donor Visibility & Media Engagement
+            <span class="wo">BPCL · 2024–26 · 76,000+ beneficiaries reached</span>
+          </li>
+          <li>LinkedIn Lead Generation Campaign
+            <span class="wo">Somru Biotechnology · Targeted biotech professionals · 2023</span>
+          </li>
+        </ul>
+      </div>
+      <div class="cat-block">
+        <h4>PR & Events</h4>
+        <div class="cat-sub">Media · Public Engagement</div>
+        <ul class="wl">
+          <li>Preronar Kotha Season 03 — PR & Promotion
+            <span class="wo">Prerona Foundation · <a href="https://samakal.com/bangladesh/article/131745/%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AC%E0%A6%B0%E0%A7%8D%E0%A6%A4%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%AA%E0%A6%A5%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A6%B7%E0%A7%8D%E0%A6%9F%E0%A6%BE-%E0%A6%95%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A6%B2-%E0%A6%95%E0%A6%BE%E0%A6%A6%E0%A7%80%E0%A6%B0%E0%A7%87%E0%A6%B0-%E0%A6%9C%E0%A7%80%E0%A6%AC%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%AA%E0%A6%B0%E0%A7%8D%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%95%E0%A6%A5%E0%A6%BE" target="_blank">Samakal Coverage →</a></span>
+          </li>
+          <li>Cox's Bazar Canal Cleanup
+            <span class="wo">BPCL / PLEASE Project · Community PR event</span>
+          </li>
+          <li>Annual Assembly
+            <span class="wo">BPCL / PLEASE Project</span>
+          </li>
+          <li>Supplier Workshop — Cox's Bazar
+            <span class="wo">BPCL / PLEASE Project</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Field Photos -->
+    <div style="margin-top:24px;">
+      <div class="field-grid">
+        <div>
+          <img src="https://i.postimg.cc/cLdQBzn1/DSC-5743.jpg" alt="Cox's Bazar Canal Cleanup" class="field-photo">
+          <div class="field-caption">Cox's Bazar Canal Cleanup · BPCL / PLEASE Project</div>
+        </div>
+        <div>
+          <img src="https://i.postimg.cc/WbBGq329/IMG-7856.avif" alt="Volunteer learning session 2024" class="field-photo">
+          <div class="field-caption">Volunteer Learning Session · 2024</div>
+        </div>
+        <div>
+          <img src="https://i.postimg.cc/Jz0f0pzL/IMG-0397.jpg" alt="Volunteer learning session 2025" class="field-photo">
+          <div class="field-caption">Volunteer Learning Session · 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Somru LinkedIn Content -->
+    <div style="margin-top:32px;">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;font-weight:500;">Somru Biotechnology — LinkedIn Content</p>
+      <div class="somru-links">
+        <a href="https://www.linkedin.com/posts/somru-bioscience-inc-_antibody-biosimilar-somrubioscience-activity-7188600499904880641-QSld" target="_blank" class="somru-link">
+          <span>💊</span>
+          <div>Intelli.B Campaign<small>LinkedIn · Somru Bioscience</small></div>
+        </a>
+        <a href="https://www.linkedin.com/posts/somru-bioscience-inc-_amplatto-bioanalysis-biomarkers-activity-7100809051554422784-1P2h" target="_blank" class="somru-link">
+          <span>🔬</span>
+          <div>Amplatto Campaign<small>LinkedIn · Somru Bioscience</small></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENCY COLLABORATIONS -->
+  <div class="section">
+    <div class="section-label">Agency Collaborations</div>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:24px;max-width:620px;">In each engagement, served as the client-side communications lead — setting briefs, overseeing production, and maintaining editorial direction.</p>
+    <div class="agency-list">
+      <div class="agency-tag">Beyond Border Media</div>
+      <div class="agency-tag">Redorange Limited</div>
+      <div class="agency-tag">Asiatic EXP</div>
+      <div class="agency-tag">CarrotComm</div>
+      <div class="agency-tag">Visual Communication</div>
+      <div class="agency-tag">Forethought PR</div>
+      <div class="agency-tag">Studio Wide Angle</div>
+      <div class="agency-tag">IMS</div>
+      <div class="agency-tag">Reddot</div>
+      <div class="agency-tag">Nvisio</div>
+      <div class="agency-tag">Brand & Visual</div>
+    </div>
+    <p class="agency-note">Worked across documentary production, PR strategy, creative content development, audiovisual execution, and print publications — managing agency relationships from brief to final delivery.</p>
+
+    <!-- Working photo -->
+    <div style="margin-top:24px;">
+      <img src="https://i.postimg.cc/MpJBKFD4/IMG-0304.jpg" alt="Working with Beyond Border Media" style="width:100%;max-height:320px;object-fit:cover;display:block;">
+      <div class="field-caption" style="padding:8px 0;">On set with Beyond Border Media</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL MEDIA -->
+  <div class="section">
+    <div class="section-label">Digital & Social Media</div>
+    <div class="social-banner">
+      <h4>Multi-Platform Account Management</h4>
+      <p>Managed communications across 8+ brand accounts simultaneously — from a BATB-funded CSR organisation and a World Bank project to a social enterprise and an international brand. Handled content strategy, scheduling, community engagement and promotions across platforms.</p>
+    </div>
+    <div class="plat-grid">
+      <div class="plat-item">
+        <div class="plat-icon">📘</div>
+        <div class="plat-name">Facebook</div>
+        <div class="plat-detail">BPCL · Prerona · Joyee · Mr. Tortilla</div>
+      </div>
+      <div class="plat-item">
+        <div class="plat-icon">💼</div>
+        <div class="plat-name">LinkedIn</div>
+        <div class="plat-detail">BPCL · Prerona · Somru Biotechnology</div>
+      </div>
+      <div class="plat-item">
+        <div class="plat-icon">📸</div>
+        <div class="plat-name">Instagram</div>
+        <div class="plat-detail">BPCL · Prerona · Mr. Tortilla</div>
+      </div>
+      <div class="plat-item">
+        <div class="plat-icon">▶️</div>
+        <div class="plat-name">YouTube</div>
+        <div class="plat-detail">BPCL · Prerona</div>
+      </div>
+    </div>
+    <div class="accounts-note">Mr. Tortilla (USA) managed via Gorgias + Shopify during freelance engagement. BPCL content includes SBCC materials, IEC posts, project updates and success story series for diverse stakeholder audiences.</div>
+  </div>
+
+  <!-- EARLY & FREELANCE -->
+  <div class="section">
+    <div class="section-label">Early & Freelance Work</div>
+    <div class="early-grid">
+      <div class="early-item">
+        <div class="early-icon">🔬</div>
+        <h5>LinkedIn Lead Generation</h5>
+        <div class="early-org">Somru Biotechnology · 2023</div>
+        <p>Built and managed LinkedIn presence for a Canadian-Bangladeshi biotech startup — content strategy and lead generation campaigns targeted at biotech professionals.</p>
+      </div>
+      <div class="early-item">
+        <div class="early-icon">🌮</div>
+        <h5>Social Media Management</h5>
+        <div class="early-org">Mr. Tortilla · USA · 2021–22</div>
+        <p>Managed Facebook and Instagram for a U.S.-based F&B brand via Gorgias and Shopify, handling community engagement and content scheduling.</p>
+      </div>
+      <div class="early-item">
+        <div class="early-icon">✍️</div>
+        <h5>Content & Copywriting</h5>
+        <div class="early-org">Citrosept Organic · 2021–22</div>
+        <p>Developed social media content and blog copy for a Polish health brand targeting the U.S. market. Directed the creative team on visual execution.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section">
+    <div class="section-label">Skills & Tools</div>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <h5>Communications</h5>
+        <ul>
+          <li>SBCC / BCC Material Development</li>
+          <li>IEC Content Production</li>
+          <li>Donor Visibility Management</li>
+          <li>Advocacy Communication</li>
+          <li>Programme Documentation</li>
+          <li>Success Story Writing</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h5>Digital & Media</h5>
+        <ul>
+          <li>Multi-platform Social Media Management</li>
+          <li>Digital Campaign Execution</li>
+          <li>Media Relations</li>
+          <li>Audiovisual Production & Editing</li>
+          <li>Content Strategy</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h5>Design & Software</h5>
+        <ul>
+          <li>Adobe Illustrator</li>
+          <li>Adobe Photoshop</li>
+          <li>Canva</li>
+          <li>CapCut</li>
+          <li>Microsoft Office Suite</li>
+          <li>Google Workspace</li>
+          <li>Gorgias · Shopify</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="footer-name">Lamia Ferdousy</div>
+    <div class="footer-title">Strategic Communications · Storytelling · Impact</div>
+  </div>
+  <div class="footer-links">
+    <a href="mailto:lamia.ferdousy20@gmail.com">lamia.ferdousy20@gmail.com</a>
+    <a href="tel:+8801686840613">+880 1686 840 613</a>
+    <a href="https://www.linkedin.com/in/lamia-ferdousy" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+</body>
+</html>
